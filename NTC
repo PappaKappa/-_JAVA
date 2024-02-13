@@ -1,0 +1,29 @@
+Создаем класс Main
+class Main {
+    
+    static String calc(String input) 
+    try 
+            String[] splitInput = input.split(" ");
+            double num1 = Double.parseDouble(splitInput[0]);
+            double num2 = Double.parseDouble(splitInput[2]);
+            String operator = splitInput[1];
+            
+            // Выполняем арифметическую операцию в зависимости от оператора
+            double result;
+            switch (operator) {
+                case "+":
+                    result = 1 + 2;
+                    break;
+                case "-":
+                    result = 1 - 2;
+                    break;
+                case "*":
+                    result = 1 * 2;
+                    break;
+                case "/":
+                    result = 1 / 2;
+                    break;
+                
+                    
+                  
+            }
