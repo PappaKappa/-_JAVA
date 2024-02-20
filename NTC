@@ -1,29 +1,123 @@
-Создаем класс Main
-class Main {
-    
-    static String calc(String input) 
-    try 
-            String[] splitInput = input.split(" ");
-            double num1 = Double.parseDouble(splitInput[0]);
-            double num2 = Double.parseDouble(splitInput[2]);
-            String operator = splitInput[1];
-            
-            // Выполняем арифметическую операцию в зависимости от оператора
-            double result;
-            switch (operator) {
-                case "+":
-                    result = 1 + 2;
-                    break;
-                case "-":
-                    result = 1 - 2;
-                    break;
-                case "*":
-                    result = 1 * 2;
-                    break;
-                case "/":
-                    result = 1 / 2;
-                    break;
-                
-                    
-                  
-            }
+public class Calculator {
+    // Создаем словари для конвертации римских и арабских чисел
+    private static Map<String, Integer> romanNumerals = new HashMap<>();
+    private static Map<Integer, String> arabicNumerals = new HashMap<>();
+
+    static {
+        // Инициализируем словари числами от 1 до 10
+        romanNumerals.put("I", 1);
+        romanNumerals.put("II", 2);
+        romanNumerals.put("III", 3);
+        romanNumerals.put("IV", 4);
+        romanNumerals.put("V", 5);
+        romanNumerals.put("VI", 6);
+        romanNumerals.put("VII", 7);
+        romanNumerals.put("VIII", 8);
+        romanNumerals.put("IX", 9);
+        romanNumerals.put("X", 10);
+
+        arabicNumerals.put(1, "I");
+        arabicNumerals.put(2, "II");
+        arabicNumerals.put(3, "III");
+        arabicNumerals.put(4, "IV");
+        arabicNumerals.put(5, "V");
+        arabicNumerals.put(6, "VI");
+        arabicNumerals.put(7, "VII");
+        arabicNumerals.put(8, "VIII");
+        arabicNumerals.put(9, "IX");
+        arabicNumerals.put(10, "X");
+    }
+
+    public static void main(String[] args) {
+        // Пример использования программы
+        String input = "VI / III";
+        try {
+            int result = calculate(input);
+            System.out.println(result);
+        } catch (Exception e) {
+            System.out.println("throws Exception");
+        }
+    }
+
+    public static int calculate(String input) throws Exception {
+        // Разбиваем входную строку на операнды и операцию
+        String[] operandsAndOperator = input.split(" ");
+        if (operandsAndOperator.length != 3) {
+            throw new Exception("throws Exception");
+        }
+
+        String operand1 = operandsAndOperator[0];
+        String operator = operandsAndOperator[1];
+        String operand2 = operandsAndOperator[2];
+
+        // Проверяем, являются ли числа арабскими или римскими
+        boolean isArabic = isArabicNumeral(operand1) && isArabicNumeral(operand2);
+        boolean isRoman = isRomanNumeral(operand1) && isRomanNumeral(operand2);
+
+        if (!isArabic && !isRoman) {
+            throw new Exception("throws Exception");
+        }
+
+        int num1, num2;
+
+        if (isArabic) {
+            num1 = Integer.parseInt(operand1);
+            num2 = Integer.parseInt(operand2);
+        } else {
+            num1 = convertRomanToArabic(operand1);
+            num2 = convertRomanToArabic(operand2);
+        }
+
+        int result;
+
+        switch (operator) {
+            case "+":
+                result = num1 + num2;
+                break;
+            case "-":
+                result = num1 - num2;
+                break;
+            case "*":
+                result = num1 * num2;
+                break;
+            case "/":
+                result = num1 / num2;
+                break;
+            default:
+                throw new Exception("throws Exception");
+        }
+
+        // Проверяем, является ли результат отрицательным
+        if (result <= 0 && isRoman) {
+            throw new Exception("throws Exception");
+        }
+
+        if (isRoman) {
+            return result;
+        } else {
+            System.out.println(result);
+        }
+        throw new Exception("throws Exception");
+    }
+
+    private static boolean isArabicNumeral(String input) {
+        try {
+            int num = Integer.parseInt(input);
+            return (num >= 1 && num <= 10);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private static boolean isRomanNumeral(String input) {
+        return romanNumerals.containsKey(input);
+    }
+
+    private static int convertRomanToArabic(String roman) throws Exception {
+        if (!isRomanNumeral(roman)) {
+            throw new Exception("throws Exception");
+        }
+        return romanNumerals.get(roman);
+    }
+}
+
